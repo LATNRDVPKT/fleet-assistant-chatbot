@@ -1,0 +1,92 @@
+# Domain knowledge used by preprocessing and query rewriting.
+
+# Query expansion: if a key phrase appears in the question, the listed terms
+# are appended to the search query (helps BM25 + vector search find the right chunk).
+synonyms:
+  adblue: ["DEF", "diesel exhaust fluid"]
+  def: ["AdBlue", "diesel exhaust fluid"]
+  soc: ["state of charge"]
+  "state of charge": ["SoC"]
+  "oil change": ["engine oil and oil filter change", "preventive maintenance schedule"]
+  "service interval": ["preventive maintenance schedule"]
+  "harsh braking": ["deceleration", "telematics thresholds"]
+  "harsh acceleration": ["telematics thresholds"]
+  "harsh cornering": ["lateral", "telematics thresholds"]
+  overspeed: ["speed governor", "telematics thresholds"]
+  "panic button": ["emergency button", "AIS-140"]
+  "tyre pressure": ["cold pressure", "tyre specifications"]
+  "tire pressure": ["tyre", "cold pressure"]
+  mileage: ["fuel economy", "km/L"]
+  range: ["rated range", "state of charge"]
+  charging: ["charging procedure", "DC fast charging", "AC charging"]
+  "warning light": ["warning lamp", "instrument cluster"]
+  "check engine": ["MIL", "warning lamp"]
+  dtc: ["diagnostic trouble code"]
+  "fault code": ["diagnostic trouble code", "DTC"]
+  fire: ["fire extinguisher", "FDSS", "emergency procedures"]
+  "working hours": ["driver hours", "Motor Transport Workers Act"]
+  "driving hours": ["continuous driving", "rest break", "Motor Transport Workers Act"]
+  capacity: ["fluid capacities"]
+  coolant: ["coolant temperature"]
+
+# Words the spell-corrector is allowed to correct TO (domain vocabulary).
+vocabulary:
+  - adblue
+  - brake
+  - braking
+  - battery
+  - charging
+  - coolant
+  - cornering
+  - acceleration
+  - deceleration
+  - diesel
+  - emergency
+  - extinguisher
+  - maintenance
+  - preventive
+  - pressure
+  - regeneration
+  - regenerative
+  - schedule
+  - telematics
+  - threshold
+  - thresholds
+  - transmission
+  - tyre
+  - tyres
+  - warning
+  - interval
+  - governor
+  - compliance
+  - fatigue
+  - overspeed
+  - idling
+  - passenger
+  - evacuation
+  - capacity
+  - specification
+  - suppression
+  - temperature
+  - retarder
+  - trailer
+  - coupling
+  - wading
+  - interlock
+  - economy
+  - consumption
+  - driver
+  - vehicle
+
+# Requests that must be refused (tampering with safety/compliance equipment).
+blocked_patterns:
+  - "(bypass|disable|defeat|tamper|remove|switch off|turn off|cheat).{0,40}(speed governor|speed limiter|governor|ais-?140|vltd|gps tracker|tracker|panic button|abs|dpf|adblue|def|scr|emission|tachograph|interlock|fdss)"
+  - "(fake|forge|falsify|manipulate).{0,40}(log|logs|record|records|hours|trip|odometer|certificate)"
+
+# Prompt-injection signatures.
+injection_patterns:
+  - "ignore (all |any )?(previous|prior|above) (instructions|rules)"
+  - "(reveal|show|print) (your |the )?(system prompt|instructions)"
+  - "you are now"
+  - "developer mode"
+  - "jailbreak"

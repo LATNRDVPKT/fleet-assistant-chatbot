@@ -1,0 +1,41 @@
+# ---------------------------------------------------------------------
+# Runs the whole system on one machine (your laptop or one EC2 instance):
+#   nginx (port 80) → ui (Streamlit, 8501)   for  /
+#                   → api (FastAPI, 8000)    for  /v1/*  /health  /docs
+#
+#   docker compose up -d --build        start
+#   docker compose logs -f api          follow the step-by-step API logs
+#   docker compose down                 stop
+# ---------------------------------------------------------------------
+services:
+  api:
+    build: .
+    env_file: .env
+    environment:
+      INDEX_DIR: /app/data/index
+    volumes:
+      - index-data:/app/data/index          # the search index survives restarts
+    restart: unless-stopped
+    expose: ["8000"]
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    environment:
+      API_URL: http://api:8000
+      API_KEY: ${UI_API_KEY:-dev-key-123}
+    depends_on: [api]
+    restart: unless-stopped
+    expose: ["8501"]
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports: ["80:80"]
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [api, ui]
+    restart: unless-stopped
+
+volumes:
+  index-data:
