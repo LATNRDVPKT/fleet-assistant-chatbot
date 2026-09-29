@@ -1,0 +1,4 @@
+# ---- tests, evals, load test ----
+-r requirements.txt
+-r requirements-ui.txt
+pytest==9.1.1

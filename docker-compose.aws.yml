@@ -1,0 +1,22 @@
+# ---------------------------------------------------------------------
+# AWS add-on: send every container's logs to CloudWatch Logs
+# (log group /fleet-copilot/prod, one log stream per container).
+#
+#   docker compose -f docker-compose.yml -f docker-compose.aws.yml up -d --build
+#
+# Needs the EC2 instance role permissions in deploy/aws/iam-policy.json.
+# ---------------------------------------------------------------------
+x-cloudwatch: &cloudwatch
+  driver: awslogs
+  options:
+    awslogs-region: ${AWS_REGION:-ap-south-1}
+    awslogs-group: /fleet-copilot/prod
+    awslogs-create-group: "true"
+
+services:
+  api:
+    logging: *cloudwatch
+  ui:
+    logging: *cloudwatch
+  nginx:
+    logging: *cloudwatch

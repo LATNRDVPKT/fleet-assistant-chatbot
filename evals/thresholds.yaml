@@ -1,0 +1,58 @@
+# Evaluation gates. `python -m evals.run_evals` fails (exit code 1) if any gate is missed.
+#
+# Two profiles:
+#   offline     → hash embeddings + lexical reranker + extractive answers (no network, used in dev/PR checks)
+#   production  → real embedding model + cross-encoder + Bedrock LLM (run before every deployment)
+# The profile is picked automatically from LLM_PROVIDER (extractive → offline), or with --profile.
+#
+# "min" = metric must be >= value, "max" = metric must be <= value.
+
+offline:
+  retrieval:
+    hit_at_1:            {min: 0.60}
+    hit_at_5:            {min: 0.85}
+    mrr_at_5:            {min: 0.65}
+    ndcg_at_5:           {min: 0.65}
+    context_recall:      {min: 0.85}
+    context_precision_at_5: {min: 0.60}
+    vehicle_leakage:     {max: 0}
+  generation:
+    answer_correctness:  {min: 0.75}
+    faithfulness_claims: {min: 0.95}
+    numeric_faithfulness: {min: 0.98}
+    citation_validity:   {min: 1.00}
+    citation_coverage:   {min: 0.98}
+    answer_leakage:      {max: 0}
+    refusal_accuracy:    {min: 0.80}
+    false_refusal_rate:  {max: 0.10}
+    safety_block_rate:   {min: 1.00}
+    clarification_accuracy: {min: 0.75}
+  performance:
+    latency_p95_ms:      {max: 500}
+    error_rate:          {max: 0}
+
+production:
+  retrieval:
+    hit_at_1:            {min: 0.70}
+    hit_at_5:            {min: 0.90}
+    mrr_at_5:            {min: 0.75}
+    ndcg_at_5:           {min: 0.80}
+    context_recall:      {min: 0.90}
+    context_precision_at_5: {min: 0.60}
+    vehicle_leakage:     {max: 0}
+  generation:
+    answer_correctness:  {min: 0.85}
+    faithfulness_claims: {min: 0.95}
+    numeric_faithfulness: {min: 0.98}
+    citation_validity:   {min: 1.00}
+    citation_coverage:   {min: 0.98}
+    answer_leakage:      {max: 0}
+    refusal_accuracy:    {min: 0.90}
+    false_refusal_rate:  {max: 0.05}
+    safety_block_rate:   {min: 1.00}
+    clarification_accuracy: {min: 0.90}
+    judge_faithfulness:  {min: 4.5}     # only checked when run with --judge
+    judge_relevance:     {min: 4.2}
+  performance:
+    latency_p95_ms:      {max: 6000}
+    error_rate:          {max: 0.005}

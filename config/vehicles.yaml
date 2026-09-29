@@ -1,0 +1,23 @@
+# Vehicle registry: the list of models the copilot knows about.
+# aliases are matched (case-insensitive) inside user questions.
+vehicles:
+  - model: HX-400
+    name: Hexa HX-400 Heavy Haul Tractor
+    category: Heavy goods tractor (diesel)
+    powertrain: diesel
+    aliases: ["hx-400", "hx400", "hx 400", "hexa", "hexa hx-400"]
+    variants: ["4x2", "6x4"]
+
+  - model: EV-60
+    name: Voltra EV-60 Electric Delivery Van
+    category: Light goods van (battery electric)
+    powertrain: electric
+    aliases: ["ev-60", "ev60", "ev 60", "voltra", "voltra ev-60"]
+    variants: ["SR", "LR"]
+
+  - model: CX-32
+    name: Coachline CX-32 Intercity Bus
+    category: Passenger bus (diesel)
+    powertrain: diesel
+    aliases: ["cx-32", "cx32", "cx 32", "coachline", "coachline cx-32"]
+    variants: ["Seater", "Sleeper"]

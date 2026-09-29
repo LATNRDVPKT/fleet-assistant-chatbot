@@ -1,0 +1,54 @@
+# =====================================================================
+# Ingestion manifest — the ONLY place you register documents.
+# Every chunk produced from a document inherits these metadata fields,
+# and retrieval filters on them (vehicle_model, region, doc_type).
+#
+# To add a new vehicle model:
+#   1. Put the file in data/documents/ (.pdf or .docx)
+#   2. Add the model to config/vehicles.yaml (aliases + variants)
+#   3. Add an entry below with vehicle_model = that model id
+#   4. Run:  make ingest   then   make eval
+# =====================================================================
+index_name: fleet_docs
+
+documents:
+  # Fleet-wide handbook: applies to every vehicle (vehicle_model: ALL)
+  - doc_id: FLEET-HANDBOOK
+    path: data/documents/Fleet_Operations_Driver_Safety_Handbook.docx
+    title: Fleet Operations & Driver Safety Handbook
+    doc_type: fleet_handbook
+    vehicle_model: ALL
+    variants: [ALL]
+    region: India
+    version: "1.0"
+    effective_date: "2026-01-01"
+
+  - doc_id: VM-HX400-OM
+    path: data/documents/VM-HX400_Heavy_Haul_Tractor_Operator_Manual.pdf
+    title: Hexa HX-400 Heavy Haul Tractor – Operator & Fleet Maintenance Manual
+    doc_type: vehicle_manual
+    vehicle_model: HX-400
+    variants: ["4x2", "6x4"]
+    region: India
+    version: "1.2"
+    effective_date: "2026-07-01"
+
+  - doc_id: VM-EV60-OM
+    path: data/documents/VM-EV60_Electric_Delivery_Van_Operator_Manual.pdf
+    title: Voltra EV-60 Electric Delivery Van – Operator & Fleet Maintenance Manual
+    doc_type: vehicle_manual
+    vehicle_model: EV-60
+    variants: ["SR", "LR"]
+    region: India
+    version: "2.0"
+    effective_date: "2026-08-15"
+
+  - doc_id: VM-CX32-OM
+    path: data/documents/VM-CX32_Intercity_Bus_Operator_Manual.pdf
+    title: Coachline CX-32 Intercity Bus – Operator & Fleet Maintenance Manual
+    doc_type: vehicle_manual
+    vehicle_model: CX-32
+    variants: ["Seater", "Sleeper"]
+    region: India
+    version: "1.0"
+    effective_date: "2026-06-01"
